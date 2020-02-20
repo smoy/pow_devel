@@ -174,7 +174,6 @@ beta_settings = {
     "dot_format"    :   True
 }
 
-#from handlers.very_raw_own_handler import VeryRawOwnHandler
-routes = [
-            #(r'.*', VeryRawOwnHandler)  # make sure to enable and adapt the import above as well
-]
+#
+# classic routes are move to conf/raw_routes.py
+#

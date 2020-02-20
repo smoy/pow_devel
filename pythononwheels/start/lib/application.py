@@ -11,7 +11,7 @@ import {{appname}}.conf.config as cfg
 from {{appname}}.lib.powlib import merge_two_dicts
 from {{appname}}.database.sqldblib import Base, Session, engine
 from {{appname}}.conf.config import myapp
-from {{appname}}.conf.config import routes
+from {{appname}}.conf.raw_routes import raw_routes
 from tornado.log import access_log
 import logging
 import datetime
@@ -71,7 +71,7 @@ class Application(tornado.web.Application):
     #
     # handlers class variable is filled by the @add_route decorator.
     # merged with the instance variable in __init__
-    # so classic routes and @add_routes are merged.
+    # so classic raw_routes and @add_routes are merged.
     #
     handlers=[]
 
@@ -80,7 +80,7 @@ class Application(tornado.web.Application):
 
      
     def __init__(self):
-        self.handlers = routes
+        self.handlers = raw_routes
         # importing !"activates" the add_route decorator
         self.import_all_handlers()
         h=getattr(self.__class__, "handlers", None)
