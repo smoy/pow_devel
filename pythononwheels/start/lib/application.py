@@ -74,7 +74,7 @@ class Application(tornado.web.Application):
     # so classic raw_routes and @add_routes are merged.
     #
     handlers=[]
-
+    routes_dict={}
     #routing list to handle absolute route positioning
     handlers_tmp = []
 
@@ -343,9 +343,11 @@ class Application(tornado.web.Application):
                 routes = [(x[0]+ r"(?:/?\.\w+)?/?", x[1]) for x in routes]  
             #print("added the following routes: " + r)
             handlers=getattr(self.__class__, "handlers", None)
+            routes_dict=getattr(self.__class__, "routes_dict", None)
             try:
                 for elem in routes:
                     handlers.append( ((elem[0],cls, elem[1]), pos) )
+                    routes_dict[elem[0]] = { "class" : cls.__name__, "dispatch" : elem[1], "position" : pos } 
             except Exception as e:
                 print("Error in add_rest_routes")
                 raise e
@@ -395,6 +397,7 @@ class Application(tornado.web.Application):
                     pos = method.route.get("pos", -1)
                     # now just do the same as for the class decorator
                     handlers=getattr(self.__class__, "handlers", None)
+                    routes_dict=getattr(self.__class__, "routes_dict", None)
                     if _rule_re.match(route):
                         ########################################
                         # new style Werkzeug route
@@ -412,6 +415,11 @@ class Application(tornado.web.Application):
                         dispatch_lower=dict((k.lower(), v) for k,v in dispatch.items())
                         route_tuple = (fin_route,cls, dispatch_lower)
                         handlers.append((route_tuple,pos))
+                        routes_dict[route] = { 
+                                "class" : str(cls.__name__), 
+                                "dispatch" : str(list(dispatch_lower.keys())),
+                                "pos"   : pos 
+                            }
                     else:
                         ###################################
                         #  old style regex route
@@ -431,6 +439,11 @@ class Application(tornado.web.Application):
                         route_tuple = (fin_route,cls, dispatch_lower)
                         #route_tuple = (fin_route,cls, dispatch)
                         handlers.append((route_tuple,pos))
+                        routes_dict[route] = { 
+                                "class" : str(cls.__name__), 
+                                "dispatch" : str(list(dispatch_lower.keys())),
+                                "pos"   : pos 
+                            }
                     #print("handlers: " + str(self.handlers))
                     #print("ROUTING: added route for: " + cls.__name__ +  ": " + route + " -> " + fin_route +  " dispatch")
                     #print("ROUTING: METHOD ROUTE (+) : handler: {}, route: {}, fin_route: {}, dispatch(lower): {} ".format( 
@@ -461,6 +474,7 @@ class Application(tornado.web.Application):
             """
             cls_name = cls.__name__.lower()
             handlers=getattr(self.__class__, "handlers", None)
+            routes_dict=getattr(self.__class__, "routes_dict", None)
             if _rule_re.match(route):
                 ########################################
                 # new style Werkzeug route
@@ -478,6 +492,11 @@ class Application(tornado.web.Application):
                 dispatch_lower=dict((k.lower(), v) for k,v in dispatch.items())
                 route_tuple = (fin_route,cls, dispatch_lower)
                 handlers.append((route_tuple,pos))
+                routes_dict[route] = { 
+                        "class" : str(cls.__name__), 
+                        "dispatch" : str(list(dispatch_lower.keys())),
+                        "pos" : pos
+                    }
             else:
                 ###################################
                 #  old style regex route
@@ -497,6 +516,11 @@ class Application(tornado.web.Application):
                 route_tuple = (fin_route,cls, dispatch_lower)
                 #route_tuple = (fin_route,cls, dispatch)
                 handlers.append((route_tuple,pos))
+                routes_dict[route] = { 
+                        "class" : str(cls.__name__), 
+                        "dispatch" : str(list(dispatch_lower.keys())),
+                        "pos" : pos
+                    }
             #print("handlers: " + str(self.handlers))
             #print("ROUTING: added route for: " + cls.__name__ +  ": " + route + " -> " + fin_route +  " dispatch")
             #print("ROUTING:  CLASS ROUTE (+) : handler: {}, route: {}, fin_route: {}, dispatch(lower): {} ".format( 

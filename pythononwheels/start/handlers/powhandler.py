@@ -7,7 +7,7 @@ from {{appname}}.conf.config import myapp
 from {{appname}}.handlers.base import BaseHandler
 from {{appname}}.handlers.powhandlermixin import PowHandlerMixin
 
-class PowHandler(BaseHandler, PowHandlerMixin):
+class PowHandler(PowHandlerMixin, BaseHandler):
     """
         The Base PowHandler 
         Place to put common stuff for all standard handlers 

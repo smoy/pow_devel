@@ -66,8 +66,22 @@ class PyTestHandler(PowHandler):
             Testcase: dont delete (see tests/run_tests.py)
         """
         self.write("12")
+
+@app.make_routes()
+class PowUtilsHandler(PowHandler):
+    """
+        Some useful utilities to control your app.
+
+    """
+    @route(r"/routes", dispatch=["get"])
+    #@tornado.web.authenticated 
+    def get_routes(self):
+        """ returns all current routes for this application object """
+        import simplejson as json
+        self.success(data=json.dumps(self.application.routes_dict))
     
-# this will be the last route since it has the lowest pos.
+    
+
 @app.add_route(r".*", pos=0)
 class ErrorHandler(PowHandler):
     def get(self):

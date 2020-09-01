@@ -1,5 +1,5 @@
 import tornado.web
-from {{appname}}.config import myapp 
+from {{appname}}.conf.config import myapp 
 
 class PowHandlerMixin():
     """
@@ -26,7 +26,7 @@ class PowHandlerMixin():
             raise NotImplementedError("USer Authentication not implemented, yet")
         else:
             # if authentication is disabled return a dummy guest user
-            return True
+            return { "user" : "guest" }
         
     def check_password_hash(self, pwhash, password ):
         """
