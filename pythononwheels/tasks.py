@@ -156,12 +156,38 @@ def clean(c, path="../..", name="testapp", force=False):
         print(40*"-")
 
 @task
-def py_versiontest(c):
+def versiontest(c, nocache=False, path=".."):
     """
         - build the current wheel / dist
         - run the container (image: pow-ubuntu-python-versiontest) with mounted dist volume
         - container runs tests automatically
     """
+    import glob
+    import os
+    import shutil
+    with c.cd(os.path.normpath(path)):
+        print(40*"-")
+        print(" Preparing the multi python version test (3.6, 2.7, 3.8) ")
+        print(40*"-")
+        cache = not nocache
+        print(f" using docker cache: {cache}")
+        print(" building the framework....")
+        # deleting old releases.
+        c.run("rm -rf ./build/*")
+        # build the framework
+        c.run("python setup.py -q sdist bdist_wheel")
+        print(" done.")
+    with c.cd(os.path.normpath("../testcontainer")):
+        #get lastest wheel filename
+        list_of_files = glob.glob("../dist/*.whl") # * means all if need specific format then *.csv
+        latest_file = os.path.basename(max(list_of_files, key=os.path.getctime))
+        print(f" using: {latest_file}")
+        print(f" building the test container image...")
+        r=shutil.copy(f"../dist/{latest_file}", "./pow.whl")
+        if nocache:
+            c.run(f"docker build --no-cache --build-arg POW_WHEEL={latest_file} -t powversiontest .")
+        else:
+            c.run(f"docker build --build-arg POW_WHEEL={latest_file} -t powversiontest .")
     pass
 
 @task

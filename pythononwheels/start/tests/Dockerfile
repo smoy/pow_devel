@@ -15,6 +15,8 @@ RUN apt-get -y install python3.6
 RUN apt-get -y install python3.7
 # python 3.8 is laready the default python3 in focal (20.04)
 RUN mkdir /devel
+RUN mkdir /wheel
+WORKDIR /wheel
+RUN pip3 install ${POW_WHEEL}
 WORKDIR /devel
-
 CMD ["/bin/bash"]

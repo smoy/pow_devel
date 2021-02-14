@@ -86,13 +86,10 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
         skip_extensions.append(".sui")
 
     exclude_files=[]
-    if update_only:
-        # only update pow versions. Leave all non pow or possibly changed stuff untouched
-        # maybe add encoders.py, decoders.py to the list in the future.
-        exclude_files.extend([ "alembic.ini", "db.sqlite", "tiny.db",
-                                "env.py", "shorties.py", "config.py", "powhandler.py", 
-                                "powmodel.py", "tinymodel.py", "mongomodel.py" ])
-        skip_dirs.extend([ "migrations",  "views", "static" ])
+    exclude_files.extend([ "alembic.ini", "db.sqlite", "tiny.db",
+                            "env.py", "shorties.py", "config.py", "powhandler.py", 
+                            "powmodel.py", "tinymodel.py", "mongomodel.py" ])
+    skip_dirs.extend([ "migrations",  "views", "static" ])
 
     #
     # walk the root (/pow/start)
@@ -270,9 +267,11 @@ def main():
 
     base = os.path.normpath(os.path.join(os.getcwd(), args.path))
     apppath = os.path.normpath(os.path.join(base, args.name))
-    tpath = os.path.normpath(os.path.join(base, "migrations"))
+    
+    #tpath = os.path.normpath(os.path.join(base, "migrations"))
     # create the versions directory
-    os.makedirs(os.path.normpath(os.path.join(tpath, "versions")), exist_ok=True)
+    #os.makedirs(os.path.normpath(os.path.join(tpath, "versions")), exist_ok=True)
+    
     # create the views directory
     #os.makedirs(os.path.normpath(os.path.join(base, "migrations")), exist_ok=True)
     print()
