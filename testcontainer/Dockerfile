@@ -2,6 +2,7 @@ FROM ubuntu:20.04
 
 EXPOSE 8080
 
+RUN apt-get clean
 RUN apt-get -y update
 ARG DEBIAN_FRONTEND="noninteractive"
 # see: https://github.com/phusion/baseimage-docker/issues/319
@@ -80,5 +81,10 @@ WORKDIR /devel/testapp38/tests
 RUN /devel/testapp38/.venv/bin/python3.8 runtests.py
 RUN cp /devel/testapp38/views/testreport.html /results/testresults38.html
 
+# server the results
+RUN cd /devel/testapp38
+WORKDIR /devel/testapp38
+RUN cp /results/* /devel/testapp38/static
+CMD ["/bin/bash", "-c", "/devel/testapp38/.venv/bin/python3.8 /devel/testapp38/server.py"]
 
-CMD ["/bin/bash"]
+#CMD ["/bin/bash"]
