@@ -50,6 +50,13 @@ class PyTestHandler(PowHandler):
         """
             this action will show the pytest from test/runtests.py 
         """
+        self.render("testreport.html")
+    
+    @route(r"/versiontest", dispatch=["get"])
+    def show_results(self):
+        """
+            this action will show the pytest from test/runtests.py 
+        """
         self.render("versiontest.html")
     
     @route(r'/test/<uuid:identifier>', dispatch=["get"])

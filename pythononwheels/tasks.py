@@ -56,8 +56,6 @@ def build(c, path="../..", name="testapp"):
         build_all(c,name, path)
 
 
-
-
 def build_all(c, name, path, force=False):
     """
         the actual function that does the job
@@ -171,7 +169,7 @@ def versiontest(c, nocache=False, path=".."):
         print(40*"-")
         cache = not nocache
         print(f" using docker cache: {cache}")
-        print(" building the framework....")
+        print(" building the PythonOnWheels framework....")
         # deleting old releases.
         c.run("rm -rf ./build/*")
         # build the framework
@@ -183,12 +181,12 @@ def versiontest(c, nocache=False, path=".."):
         latest_file = os.path.basename(max(list_of_files, key=os.path.getctime))
         print(f" using: {latest_file}")
         print(f" building the test container image...")
-        r=shutil.copy(f"../dist/{latest_file}", "./pow.whl")
+        #r=shutil.copy(f"../dist/{latest_file}", "./pow.whl")
         if nocache:
-            c.run(f"docker build --no-cache --build-arg POW_WHEEL={latest_file} -t powversiontest .")
+            c.run(f"docker build --no-cache --build-arg POW_WHEEL={latest_file} -t powversiontest:latest .")
         else:
-            c.run(f"docker build --build-arg POW_WHEEL={latest_file} -t powversiontest .")
-    pass
+            c.run(f"docker build --build-arg POW_WHEEL={latest_file} -t powversiontest:latest .")
+    
 
 @task
 def testcliparams(c, name="def"):

@@ -149,14 +149,14 @@ database = {
     "mongodb" : {
         "dbname"    :   "testdb",  
         "atlas"     :   False,
-        "atlas_cstr":   "",     # usually just copy the Atlas connection string here
+        "atlas_cstr":   "",     # just copy the Atlas connection string here
         "urlencode" :   False,  # if set to True you need to give usr / pwd below 
         "atlas_user":   "",     # will be urllib.parse.quoted
         "atlas_pwd" :   "",     # will still be raw
-        "host"      :   "localhost",       
+        "host"      :   "mongodb",       
         "port"      :   27017,   
-        "user"      :   None,
-        "passwd"    :   None,
+        "user"      :   "mongodbuser",
+        "passwd"    :   "mongodbpassword",
         #"indexes"   :   { "collection" : ([("field", pymongo.ASCENDING)], { "unique" : True } )},
         "indexes"   :   {},
         "enabled"   :   False       

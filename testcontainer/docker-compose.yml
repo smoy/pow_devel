@@ -1,0 +1,15 @@
+version: "3.9"  # optional since v1.27.0
+
+services:
+  webapp:
+    image: powversiontest:latest
+    ports:
+      - "8080:8080"
+    #stdin_open: true
+    tty: true
+    #volumes:
+    #  - .:/code
+    links:
+      - mongodb
+  mongodb:
+    image: mongo:4.4.3-bionic

@@ -76,20 +76,27 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
     os.makedirs(outdir, exist_ok=True)
     template_exts = [".py", ".tmpl"]
     skip_extensions=[]
+    #
     # excluded from template processing.
+    #
     exclude_dirs = ["static", "stubs", "views"]
     # skip these dirs entirely => these are only relevant for PoW development but not for generated apps
     skip_dirs= ["stuff", "werkzeug"]
 
-    if view_type.lower() != "sui":
-        skip_dirs.append("sui")
-        skip_extensions.append(".sui")
+    # if view_type.lower() != "sui":
+    #     skip_dirs.append("sui")
+    #     skip_extensions.append(".sui")
+    
 
+    #
+    # exclude files are ignored in update mode.
+    #
     exclude_files=[]
     exclude_files.extend([ "alembic.ini", "db.sqlite", "tiny.db",
                             "env.py", "shorties.py", "config.py", "powhandler.py", 
                             "powmodel.py", "tinymodel.py", "mongomodel.py" ])
-    skip_dirs.extend([ "migrations",  "views", "static" ])
+    #
+    # skip_dirs.extend([ "migrations",  "views", "static" ])
 
     #
     # walk the root (/pow/start)
@@ -168,7 +175,7 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
                             force=force
                             )
             else:
-                print("   skipped in update_only: " + str(f))
+                print(f"   skipped in update_only: {f}")
     #print("   DB path: " + sqlite_path)
     #
     # rename the view file extension according the --view paramter
@@ -204,13 +211,13 @@ def generate_app(appname, force=False, outpath="..", dbtype="sql", update_only=F
         print(40*"-")
         print("   Update only. ")
         print(40*"-")
-        print( "  I did not touch:  ")
+        print( "  .. did not touch:  ")
         print(exclude_files)
         print(skip_dirs)
 
 def rename_extensions(folder, old_ext, new_ext, files=None):
     """
-        renames all file extension in the givben folder 
+        renames all file extension in the given folder 
         from *.old_ext to *.new_ext
     """
     for filename in os.listdir(folder):

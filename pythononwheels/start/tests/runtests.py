@@ -59,17 +59,18 @@ def run(conf):
         # osx
         #ret = pytest.main(["-k-notonosx", "--junitxml=result.xml", "pow_tests.py"])
         ret = pytest.main([
-            "-k-notonosx", "--html=../views/testreport.html", "--self-contained-html", "pow_tests.py",
+            "-k-notonosx", "--html=../views/testreport.html", "--self-contained-html", 
             '-c', 'pytest.ini'
             ])
     else:
         # OLD: ret = pytest.main(["--junitxml=result.xml", "pow_tests.py"])
         ret = pytest.main([
-            "--html=../views/testreport.html", "--self-contained-html",
-            '-c', 'pytest.ini'
+            "--html=../views/testreport.html", "--self-contained-html", 
+            "--junitxml=../views/testreport.xml", '-c', 'pytest.ini'
         ])
-    
-    print(" Failures: " +str(ret))
+    print(60*"-")
+    print(" Pytest.main returned: " +str(ret))
+    print(60*"-")
     print()
     
     print("  .. done.")
